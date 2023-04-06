@@ -1858,7 +1858,7 @@ static void mdss_panel_validate_debugfs_info(struct msm_fb_data_type *mfd)
 		if (is_panel_split(mfd) && pdata->next)
 			mdss_fb_validate_split(pdata->panel_info.xres,
 					pdata->next->panel_info.xres, mfd);
-		mdss_panelinfo_to_fb_var(panel_info, var);
+		mdss_panelinfo_to_fb_var(mfd);
 		if (mdss_fb_send_panel_event(mfd, MDSS_EVENT_CHECK_PARAMS,
 							panel_info))
 			pr_err("Failed to send panel event CHECK_PARAMS\n");
@@ -1994,7 +1994,7 @@ static int mdss_fb_blank_unblank(struct msm_fb_data_type *mfd)
 		 * programmed in the controller.
 		 * Update this info in the upstream structs.
 		 */
-		mdss_panelinfo_to_fb_var(panel_info, var);
+		mdss_panelinfo_to_fb_var(mfd);
 
 		/* Start the work thread to signal idle time */
 		if (mfd->idle_time)
@@ -2749,7 +2749,7 @@ static int mdss_fb_register(struct msm_fb_data_type *mfd)
 		return ret;
 	}
 
-	mdss_panelinfo_to_fb_var(panel_info, var);
+	mdss_panelinfo_to_fb_var(mfd);
 
 	fix->type = panel_info->is_3d_panel;
 	if (mfd->mdp.fb_stride)
@@ -3455,7 +3455,7 @@ static void mdss_fb_update_resolution(struct msm_fb_data_type *mfd,
 	}
 	var->xres_virtual = var->xres;
 	var->yres_virtual = pinfo->yres * mfd->fb_page;
-	mdss_panelinfo_to_fb_var(pinfo, var);
+	mdss_panelinfo_to_fb_var(mfd);
 }
 
 int mdss_fb_atomic_commit(struct fb_info *info,
