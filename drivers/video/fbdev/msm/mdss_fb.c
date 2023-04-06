@@ -3692,7 +3692,7 @@ static void mdss_fb_var_to_panelinfo(struct fb_var_screeninfo *var,
 void mdss_panelinfo_to_fb_var(struct msm_fb_data_type *mfd)
 {
 	if (!mfd)
-		return -EINVAL;
+		return;
 
 	struct mdss_panel_info *pinfo = mfd->panel_info;
 	struct fb_info *fbi = mfd->fbi;
