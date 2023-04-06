@@ -2962,7 +2962,7 @@ static int mdss_fb_release_all(struct fb_info *info, bool release_all)
 			      mfd->index, ret, task->comm, current->tgid);
 			return ret;
 		}
-		if (release_all && mfd->fb_ion_handle)
+		if (release_all && mfd->fb_ion_handle) {
 			printk("mdss_fb_release_all: release_ion_memory");
 			mdss_fb_free_fb_ion_memory(mfd);
 		}
