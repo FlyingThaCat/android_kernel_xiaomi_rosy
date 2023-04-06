@@ -3689,9 +3689,14 @@ static void mdss_fb_var_to_panelinfo(struct fb_var_screeninfo *var,
 		pinfo->mipi.dsi_pclk_rate = pinfo->clk_rate;
 }
 
-void mdss_panelinfo_to_fb_var(struct mdss_panel_info *pinfo,
-						struct fb_var_screeninfo *var)
+void mdss_panelinfo_to_fb_var(struct msm_fb_data_type *mfd)
 {
+	if (!mfd)
+		return -EINVAL;
+
+	struct mdss_panel_info *pinfo = mfd->panel_info;
+	struct fb_info *fbi = mfd->fbi;
+	struct fb_var_screeninfo *var = &fbi->var;
 	u32 frame_rate;
 
 	var->xres = mdss_fb_get_panel_xres(pinfo);
@@ -3726,7 +3731,13 @@ void mdss_panelinfo_to_fb_var(struct mdss_panel_info *pinfo,
 	if (pinfo->physical_height)
 		var->height = pinfo->physical_height;
 
-	pr_debug("ScreenInfo: res=%dx%d [%d, %d] [%d, %d]\n",
+	//Hack to update current fbi->mode according to fbi->var when var is updated from panel info
+	if (fbi->mode) {
+		printk("Updating mdss fb mode from fb var\n");
+		fb_var_to_videomode(fbi->mode, var);
+	}
+
+	printk("ScreenInfo: res=%dx%d [%d, %d] [%d, %d]\n",
 		var->xres, var->yres, var->left_margin,
 		var->right_margin, var->upper_margin,
 		var->lower_margin);
